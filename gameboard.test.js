@@ -25,3 +25,30 @@ test(`should throw an error when trying to place a ship outside the grid`, () =>
     board.placeShip(submarine, 10, 10, `horizontal`);
   }).toThrow(`Ship cannot be placed at (10, 10) horizontally`);
 });
+test(`should throw an error when trying to overlap ships`, () => {
+  board.placeShip(submarine, 0, 0, "horizontal");
+  const destroyer = createShip("destroyer", 3);
+  expect(() => {
+    board.placeShip(destroyer, 0, 0, "horizontal");
+  }).toThrow(`Ship overlapped with submarine`);
+});
+test(`should record a missed shot on correct cell`, () => {
+  board.receiveAttack(0, 0);
+  expect(board.getGrid()[0][0]).toBe("missed");
+});
+test(`should record a hit to the correct ship`, () => {
+  board.placeShip(submarine, 0, 0, "horizontal");
+  board.receiveAttack(0, 0);
+  board.receiveAttack(0, 1);
+  expect(submarine.isSunk()).toBe(true);
+});
+test(`should tell if all ships have been sunk`, () => {
+  board.placeShip(submarine, 0, 0, "horizontal");
+  board.receiveAttack(0, 0);
+  board.receiveAttack(0, 1);
+  expect(board.allShipsSunk()).toBe(true);
+});
+test(`should tell if not all ships have been sunk`, () => {
+  board.placeShip(submarine, 0, 0, "horizontal");
+  expect(board.allShipsSunk()).toBe(false);
+});
