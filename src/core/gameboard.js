@@ -13,6 +13,7 @@ const createGameboard = (size) => {
   let availableShips = [carrier, battleship, destroyer, submarine, patrolBoat]; //array of all ships available for placement
   let placedShips = [];
   let prevTarget = []; //to avoid repeated attack
+  let hitShots = []; //to record hit shots for rendering
   function getGrid() {
     return board;
   }
@@ -70,6 +71,7 @@ const createGameboard = (size) => {
       prevTarget.push(`${row},${col}`);
     } else {
       target.hit();
+      hitShots.push(`${row},${col}`);
       prevTarget.push(`${row},${col}`);
     }
   }
@@ -82,6 +84,7 @@ const createGameboard = (size) => {
     receiveAttack,
     allShipsSunk,
     getShipsCount: () => placedShips.length,
+    getHitShots: () => hitShots,
   };
 };
 

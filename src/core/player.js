@@ -63,6 +63,7 @@ function createPlayer(name, type) {
     beAttacked: (row, col) => playerBoard.receiveAttack(row, col),
     isLost: () => playerBoard.allShipsSunk(),
     getShipsCount: () => playerBoard.getShipsCount(),
+    getHitShots: () => playerBoard.getHitShots(),
     takeTurn,
   };
 }

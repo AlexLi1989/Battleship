@@ -4,22 +4,75 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Battleship</title>
-    <link rel="stylesheet" href="src/ui/styles.css" />
+    <script type="module" src="./src/index.js"></script>
+    <link rel="stylesheet" href="./src/ui/style.css" />
   </head>
   <body>
-    <div class="game-wrapper">
-      <h1 id="turn-display"></h1>
-      <div class="game-container">
-        <div class="board-wrapper">
-          <h2>Your Board</h2>
-          <div id="player-board" class="grid-board"></div>
+    <div class="container">
+      <h1>Battleship</h1>
+      <div class="new-players">
+        <button class="new-players-btn">New Players</button>
+        <input
+          type="text"
+          id="player-1-name"
+          placeholder="Please enter player one name"
+        />
+        <input
+          type="radio"
+          id="player-1-human"
+          name="player-1-type"
+          value="human"
+          checked
+        />
+        <label for="player-1-human">Human</label>
+        <input
+          type="radio"
+          id="player-1-computer"
+          name="player-1-type"
+          value="computer"
+        />
+        <label for="player-1-computer">Computer</label>
+        <input
+          type="text"
+          id="player-2-name"
+          placeholder="Please enter player two name"
+        />
+        <input
+          type="radio"
+          id="player-2-human"
+          name="player-2-type"
+          value="human"
+        />
+        <label for="player-2-human">Human</label>
+        <input
+          type="radio"
+          id="player-2-computer"
+          name="player-2-type"
+          value="computer"
+          checked
+        />
+        <label for="player-2-computer">Computer</label>
+      </div>
+      <div class="new-game">
+        <button class="new-game-btn">New Game</button>
+      </div>
+      <div class="messages">
+        <div class="warning"><p></p></div>
+        <div class="result"><p></p></div>
+      </div>
+      <div class="current-player">
+        <h3>Current Player : <span></span></h3>
+      </div>
+      <div class="board">
+        <div>
+          <h3 class="player-1 board-title">Player 1's board</h3>
+          <div id="player-1-board"></div>
         </div>
-        <div class="board-wrapper">
-          <h2>Computer Board</h2>
-          <div id="computer-board" class="grid-board"></div>
+        <div>
+          <h3 class="player-2 board-title">Player 2's board</h3>
+          <div id="player-2-board"></div>
         </div>
       </div>
     </div>
-    <script type="module" src="src/index.js"></script>
   </body>
 </html>
