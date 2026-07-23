@@ -2,7 +2,6 @@ import { createGameboard } from "./gameboard.js";
 //factory to create real player or computer player
 function createPlayer(name, type) {
   let playerBoard = createGameboard(10);
-  //take turn function for computer player to act
   let choices = [];
   //create an array containing all cells of enemy board for computer player
   if (type === "computer") {
@@ -21,6 +20,7 @@ function createPlayer(name, type) {
     return array;
   }
   shuffle(choices);
+  //take turn function for computer player to act
   function takeTurn(enemyPlayer) {
     if (type === "computer") {
       let target = choices.pop();
@@ -31,10 +31,11 @@ function createPlayer(name, type) {
     name,
     type,
     getPlayerGrid: () => playerBoard.getGrid(),
-    placePlayerShip: (ship, row, col, orientation) =>
-      playerBoard.placeShip(ship, row, col, orientation),
+    placePlayerShip: (shipName, row, col, orientation) =>
+      playerBoard.placeShip(shipName, row, col, orientation),
     beAttacked: (row, col) => playerBoard.receiveAttack(row, col),
     isLost: () => playerBoard.allShipsSunk(),
+    getShipsCount: () => playerBoard.getShipsCount(),
     takeTurn,
   };
 }
