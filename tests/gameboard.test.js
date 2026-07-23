@@ -1,5 +1,5 @@
-import { createGameboard } from "./gameboard.js";
-import { createShip } from "./ships.js";
+import { createGameboard } from "../src/core/gameboard.js";
+import { createShip } from "../src/core/ships.js";
 let board;
 beforeEach(() => {
   board = createGameboard(10); // create a 10x10 gameboard

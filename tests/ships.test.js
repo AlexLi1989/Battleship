@@ -1,4 +1,4 @@
-import { createShip } from "./ships.js";
+import { createShip } from "../src/core/ships.js";
 
 let submarine;
 beforeEach(() => {

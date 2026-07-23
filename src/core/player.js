@@ -2,8 +2,17 @@ import { createGameboard } from "./gameboard.js";
 //factory to create real player or computer player
 function createPlayer(name, type) {
   let playerBoard = createGameboard(10);
+  const DEFAULT_SHIP_NAMES = [
+    "Carrier",
+    "Battleship",
+    "Destroyer",
+    "Submarine",
+    "Patrol Boat",
+  ];
+
+  //--------------------------------------------------
+  // create an array containing all cells of enemy board for computer player
   let choices = [];
-  //create an array containing all cells of enemy board for computer player
   if (type === "computer") {
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
@@ -20,6 +29,24 @@ function createPlayer(name, type) {
     return array;
   }
   shuffle(choices);
+  //--------------------------------------------------
+
+  //auto placement of ships if player is computer
+  if (type === "computer") {
+    DEFAULT_SHIP_NAMES.forEach((shipName) => {
+      let isPlaced = false;
+      while (!isPlaced) {
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+        let orientation = Math.random() > 0.5 ? "horizontal" : "vertical";
+        //use try..catch for crash test as we thrown error for all invalid cases
+        try {
+          playerBoard.placeShip(shipName, row, col, orientation);
+          isPlaced = true;
+        } catch (error) {}
+      }
+    });
+  }
   //take turn function for computer player to act
   function takeTurn(enemyPlayer) {
     if (type === "computer") {

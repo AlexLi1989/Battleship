@@ -1,7 +1,7 @@
 //factory to create a game between two players
 
 function createGame(player1, player2) {
-  const REQUIRED_SHIPS_COUNT = 1; //low number for quick TDD test
+  const REQUIRED_SHIPS_COUNT = 5; //low number for quick TDD test
   let currentPlayer = player1;
   let gameOver = false;
   let winner = null;
