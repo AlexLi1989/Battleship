@@ -58,6 +58,7 @@ function createPlayer(name, type) {
   }
   function takeTurn(enemyPlayer) {
     if (type === "computer") {
+      let startSunk = enemyPlayer.getSunkCount();
       if (highPriorityTarget.length > 0) {
         let target = highPriorityTarget.pop();
         enemyPlayer.beAttacked(target[0], target[1]);
@@ -77,6 +78,14 @@ function createPlayer(name, type) {
         ) {
           addHighPriority(target[0], target[1]);
         }
+      }
+      let afterSunk = enemyPlayer.getSunkCount();
+      if (afterSunk !== startSunk) {
+        for (const cell of highPriorityTarget) {
+          choices.push(cell);
+        }
+        shuffle(choices);
+        highPriorityTarget = [];
       }
     }
   }
@@ -115,6 +124,7 @@ function createPlayer(name, type) {
     getHitShots: () => playerBoard.getHitShots(),
     takeTurn,
     autoPlaceShips,
+    getSunkCount: () => playerBoard.getSunkShipsCount(),
   };
 }
 

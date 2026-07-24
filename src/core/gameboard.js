@@ -78,6 +78,13 @@ const createGameboard = (size) => {
   function allShipsSunk() {
     return placedShips.every((ship) => ship.isSunk());
   }
+  function getSunkShipsCount() {
+    // return placedShips.filter((ship) => ship.isSunk()).length;
+    return placedShips.reduce(
+      (acc, ship) => (ship.isSunk() ? acc + 1 : acc),
+      0,
+    );
+  }
   return {
     getGrid,
     placeShip,
@@ -85,6 +92,7 @@ const createGameboard = (size) => {
     allShipsSunk,
     getShipsCount: () => placedShips.length,
     getHitShots: () => hitShots,
+    getSunkShipsCount,
   };
 };
 
