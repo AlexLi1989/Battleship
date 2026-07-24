@@ -179,3 +179,8 @@ button:hover {
   transform: scale(1.05);
 }
 
+#player-2-board.game-over {
+  pointer-events: none;
+  opacity : 0.6;
+}
+

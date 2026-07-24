@@ -1,4 +1,5 @@
 import { createGameboard } from "./gameboard.js";
+
 //factory to create real player or computer player
 function createPlayer(name, type) {
   let playerBoard = createGameboard(10);
@@ -29,10 +30,18 @@ function createPlayer(name, type) {
     return array;
   }
   shuffle(choices);
+
+  //take turn function for computer player to act
+  function takeTurn(enemyPlayer) {
+    if (type === "computer") {
+      let target = choices.pop();
+      enemyPlayer.beAttacked(target[0], target[1]);
+    }
+  }
   //--------------------------------------------------
 
-  //auto placement of ships if player is computer
-  if (type === "computer") {
+  //helper function for randomize placement of ships
+  function autoPlaceShips() {
     DEFAULT_SHIP_NAMES.forEach((shipName) => {
       let isPlaced = false;
       while (!isPlaced) {
@@ -47,13 +56,11 @@ function createPlayer(name, type) {
       }
     });
   }
-  //take turn function for computer player to act
-  function takeTurn(enemyPlayer) {
-    if (type === "computer") {
-      let target = choices.pop();
-      enemyPlayer.beAttacked(target[0], target[1]);
-    }
+  //auto placement of ships if player is computer
+  if (type === "computer") {
+    autoPlaceShips();
   }
+
   return {
     name,
     type,
@@ -65,6 +72,7 @@ function createPlayer(name, type) {
     getShipsCount: () => playerBoard.getShipsCount(),
     getHitShots: () => playerBoard.getHitShots(),
     takeTurn,
+    autoPlaceShips,
   };
 }
 

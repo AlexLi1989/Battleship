@@ -6,12 +6,13 @@ function initScreen() {
   //create objects
   let player1 = createPlayer("Player 1", "human");
   let player2 = createPlayer("Computer", "computer");
-  //test placement
-  player1.placePlayerShip("Carrier", 0, 0, "horizontal");
-  player1.placePlayerShip("Battleship", 1, 0, "horizontal");
-  player1.placePlayerShip("Destroyer", 2, 0, "horizontal");
-  player1.placePlayerShip("Submarine", 3, 0, "horizontal");
-  player1.placePlayerShip("Patrol Boat", 4, 0, "horizontal");
+  //initial placement for human player
+  if (player1.type == "human") {
+    player1.autoPlaceShips();
+  }
+  if (player2.type == "human") {
+    player2.autoPlaceShips();
+  }
   let game = createGame(player1, player2);
 
   //DOM related elements
@@ -26,7 +27,7 @@ function initScreen() {
   let newGameBtn = document.querySelector(".new-game-btn");
   let warning = document.querySelector(".warning");
   let result = document.querySelector(".result");
-  let currentPlayerDisplay = document.querySelector(".current-player");
+  let currentPlayerDisplay = document.querySelector(".current-player span");
   let player1BoardTitle = document.querySelector(".player-1.board-title");
   let player1Board = document.querySelector("#player-1-board");
   let player2BoardTitle = document.querySelector(".player-2.board-title");
@@ -40,6 +41,16 @@ function initScreen() {
     //get hits
     let player1HitShots = player1.getHitShots();
     let player2HitShots = player2.getHitShots();
+
+    //render current player
+    currentPlayerDisplay.textContent =
+      game.isGameOver() === true ? "" : `${game.getCurrentPlayer().name}`;
+
+    //render winner
+    result.innerHTML =
+      game.getWinner() !== null
+        ? `<p>Winner: ${game.getWinner().name}</p>`
+        : "";
 
     //render player's board
     let player1Grid = player1.getPlayerGrid();
@@ -74,13 +85,25 @@ function initScreen() {
         player2Board.appendChild(cell);
       }
     }
+
+    //update board class if game over
+    player2Board.classList.toggle("game-over", game.isGameOver());
   }
   player2Board.addEventListener("click", (event) => {
+    //prevent click behavior if game is over
+    if (game.isGameOver()) return;
+    //clear messages and results
+    warning.innerHTML = "";
+    result.innerHTML = "";
     let clickedCell = event.target;
     if (clickedCell.classList.contains("clean")) {
       let row = parseInt(clickedCell.dataset.row);
       let col = parseInt(clickedCell.dataset.col);
-      game.playRound(row, col);
+      try {
+        game.playRound(row, col);
+      } catch (error) {
+        warning.innerHTML = `<p>${error.message}</p>`;
+      }
       updateScreen();
     }
   });
