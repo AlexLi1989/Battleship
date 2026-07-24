@@ -3,17 +3,14 @@ import { createGame } from "../core/gameController.js";
 import { createPlayer } from "../core/player.js";
 
 function initScreen() {
-  //create objects
-  let player1 = createPlayer("Player 1", "human");
-  let player2 = createPlayer("Computer", "computer");
-  //initial placement for human player
-  if (player1.type == "human") {
-    player1.autoPlaceShips();
-  }
-  if (player2.type == "human") {
-    player2.autoPlaceShips();
-  }
-  let game = createGame(player1, player2);
+  //create variables at outer scope
+  let player1;
+  let player2;
+  let game;
+  let p1CurrentName = "Player 1";
+  let p2CurrentName = "Player 2";
+  let p1CurrentType = "human";
+  let p2CurrentType = "computer";
 
   //DOM related elements
   let gameContainer = document.querySelector(".container");
@@ -32,6 +29,58 @@ function initScreen() {
   let player1Board = document.querySelector("#player-1-board");
   let player2BoardTitle = document.querySelector(".player-2.board-title");
   let player2Board = document.querySelector("#player-2-board");
+
+  //function for new players game
+  function newPlayers() {
+    player1 = createPlayer(
+      `${player1Name.value || "Player 1"}`,
+      `${player1HumanRadio.checked ? "human" : "computer"}`,
+    );
+    p1CurrentName = player1.name;
+    p1CurrentType = player1.type;
+    player2 = createPlayer(
+      `${player2Name.value || "Player 2"}`,
+      `${player2HumanRadio.checked ? "human" : "computer"}`,
+    );
+    p2CurrentName = player2.name;
+    p2CurrentType = player2.type;
+    //initial placement for human player
+    if (player1.type == "human") {
+      player1.autoPlaceShips();
+    }
+    if (player2.type == "human") {
+      player2.autoPlaceShips();
+    }
+    game = createGame(player1, player2);
+  }
+  newPlayersBtn.addEventListener("click", () => {
+    //clear messages and results
+    warning.innerHTML = "";
+    result.innerHTML = "";
+    newPlayers();
+    updateScreen();
+  });
+
+  //function for new game(for existing players)
+  function newGame() {
+    player1 = createPlayer(p1CurrentName, p1CurrentType);
+    player2 = createPlayer(p2CurrentName, p2CurrentType);
+    //initial placement for human player
+    if (player1.type == "human") {
+      player1.autoPlaceShips();
+    }
+    if (player2.type == "human") {
+      player2.autoPlaceShips();
+    }
+    game = createGame(player1, player2);
+  }
+  newGameBtn.addEventListener("click", () => {
+    //clear messages and results
+    warning.innerHTML = "";
+    result.innerHTML = "";
+    newGame();
+    updateScreen();
+  });
 
   //update screen
   function updateScreen() {
@@ -107,6 +156,7 @@ function initScreen() {
       updateScreen();
     }
   });
+  newGame();
   updateScreen();
 }
 
