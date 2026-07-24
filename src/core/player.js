@@ -31,11 +31,53 @@ function createPlayer(name, type) {
   }
   shuffle(choices);
 
-  //take turn function for computer player to act
+  //take turn function for computer player to act,adding smarter AI
+  let highPriorityTarget = [];
+  //helper function for adding high priority target
+  function addHighPriority(x, y) {
+    let index = choices.findIndex((item) => item[0] === x + 1 && item[1] === y);
+    if (index != -1) {
+      choices.splice(index, 1);
+      highPriorityTarget.push([x + 1, y]);
+    }
+    index = choices.findIndex((item) => item[0] === x - 1 && item[1] === y);
+    if (index != -1) {
+      choices.splice(index, 1);
+      highPriorityTarget.push([x - 1, y]);
+    }
+    index = choices.findIndex((item) => item[0] === x && item[1] === y + 1);
+    if (index != -1) {
+      choices.splice(index, 1);
+      highPriorityTarget.push([x, y + 1]);
+    }
+    index = choices.findIndex((item) => item[0] === x && item[1] === y - 1);
+    if (index != -1) {
+      choices.splice(index, 1);
+      highPriorityTarget.push([x, y - 1]);
+    }
+  }
   function takeTurn(enemyPlayer) {
     if (type === "computer") {
-      let target = choices.pop();
-      enemyPlayer.beAttacked(target[0], target[1]);
+      if (highPriorityTarget.length > 0) {
+        let target = highPriorityTarget.pop();
+        enemyPlayer.beAttacked(target[0], target[1]);
+        if (
+          enemyPlayer.getPlayerGrid()[target[0]][target[1]] !== null &&
+          enemyPlayer.getPlayerGrid()[target[0]][target[1]] !== "missed"
+        ) {
+          addHighPriority(target[0], target[1]);
+        }
+      } else {
+        let target = choices.pop();
+        enemyPlayer.beAttacked(target[0], target[1]);
+        //follow up if target is a hit
+        if (
+          enemyPlayer.getPlayerGrid()[target[0]][target[1]] !== null &&
+          enemyPlayer.getPlayerGrid()[target[0]][target[1]] !== "missed"
+        ) {
+          addHighPriority(target[0], target[1]);
+        }
+      }
     }
   }
   //--------------------------------------------------
